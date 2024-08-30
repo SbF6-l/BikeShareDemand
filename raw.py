@@ -28,15 +28,15 @@ import calendar
 from datetime import datetime
 
 import os
-print(os.listdir("../input"))
+print(os.listdir("./"))
 
 """
 1) 훈련, 테스트 데이터셋의 개괄적인 형태 및 데이터의 컬럼의 속성 및 값의 개수 파악
 """
 
 #훈련데이터와 테스트 데이터 세트를 불러온다
-train = pd.read_csv('../input/train.csv')
-test = pd.read_csv('../input/test.csv')
+train = pd.read_csv('./train.csv')
+test = pd.read_csv('./test.csv')
 
 #훈련데이터 셋의 개괄적인 모형 파악
 train.head()
