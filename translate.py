@@ -209,3 +209,14 @@ ax1 = sns.pointplot(x='month',y='count',hue='weather',data=train.groupby(['weath
 ax2 = fig.add_subplot(2,1,2)
 ax2 = sns.barplot(x='month',y='count',data=train.groupby('month')['count'].mean().reset_index())
 
+
+# 风速为0的数据集
+windspeed_0 = train[train.windspeed == 0]
+# 风速不为0的数据集
+windspeed_Not0 = train[train.windspeed != 0]
+#通过热图展示风速为零时各列之间的相关系数
+fig = plt.figure(figsize=[20,20])
+ax = sns.heatmap(windspeed_0.drop(columns=['datetime','weekday']).corr(),annot=True,square=True)
+#通过热图展示风速不为零时各列之间的相关系数
+fig = plt.figure(figsize=[20,20])
+ax = sns.heatmap(windspeed_Not0.drop(columns=['datetime','weekday']).corr(),annot=True,square=True)
