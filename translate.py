@@ -59,20 +59,15 @@ test.head()
 train['tempDate'] = train.datetime.apply(lambda x:x.split())
 
 #使用拆分出的 tempDate 提取出年-月-日，从中提取 year, month, day 和 weekday 列。
-# split() 内置函数说明: https://wikidocs.net/13 [字符数据类型_ 字符串拆分] <=> join() [字符数据类型_ 字符串插入]
 train['year'] = train.tempDate.apply(lambda x:x[0].split('-')[0])
 train['month'] = train.tempDate.apply(lambda x:x[0].split('-')[1])
 train['day'] = train.tempDate.apply(lambda x:x[0].split('-')[2])
 # weekday 使用 calendar 包和 datetime 包
-# calendar.day_name 用法: https://stackoverflow.com/questions/36341484/get-day-name-from-weekday-int
-# datetime.strptime 文档: https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
-# Python 日期和时间处理: https://datascienceschool.net/view-notebook/465066ac92ef4da3b0aba32f76d9750a/ 
 train['weekday'] = train.tempDate.apply(lambda x:calendar.day_name[datetime.strptime(x[0],"%Y-%m-%d").weekday()])
 
 train['hour'] = train.tempDate.apply(lambda x:x[1].split(':')[0])
 
 #提取出的属性是字符串属性，因此需要转换为数值型数据。
-# pandas.to_numeric(): https://pandas.pydata.org/pandas-docs/stable/generated/pandas.to_numeric.html
 train['year'] = pd.to_numeric(train.year,errors='coerce')
 train['month'] = pd.to_numeric(train.month,errors='coerce')
 train['day'] = pd.to_numeric(train.day,errors='coerce')
@@ -103,24 +98,7 @@ ax3 = sns.barplot(x='day',y='count',data=train.groupby('day')['count'].mean().re
 ax4 = fig.add_subplot(2,2,4)
 ax4 = sns.barplot(x='hour',y='count',data=train.groupby('hour')['count'].mean().reset_index())
 
-# 季节与 count
-fig = plt.figure(figsize=[12,10])
-ax1 = fig.add_subplot(2,2,1)
-ax1 = sns.barplot(x='season',y='count',data=train.groupby('season')['count'].mean().reset_index())
-
-# 假日与 count
-ax2 = fig.add_subplot(2,2,2)
-ax2 = sns.barplot(x='holiday',y='count',data=train.groupby('holiday')['count'].mean().reset_index())
-
-# 工作日与 count
-ax3 = fig.add_subplot(2,2,3)
-ax3 = sns.barplot(x='workingday',y='count',data=train.groupby('workingday')['count'].mean().reset_index())
-
-# 天气与 count
-ax4 = fig.add_subplot(2,2,4)
-ax4 = sns.barplot(x='weather',y='count',data=train.groupby('weather')['count'].mean().reset_index())
-
-
+#将对应月份正常转化为对应季节
 def badToRight(month):
     if month in [12,1,2]:
         return 4
@@ -131,10 +109,7 @@ def badToRight(month):
     elif month in [9,10,11]:
         return 3
 
-# apply() 内置函数是必须掌握的函数之一，类似于 split(), map(), join(), filter() 等。
 train['season'] = train.month.apply(badToRight)
-
-#与之前的可视化一样，比较一个列与结果值的关系
 
 # 季节与 count
 fig = plt.figure(figsize=[12,10])
@@ -153,7 +128,7 @@ ax3 = sns.barplot(x='workingday',y='count',data=train.groupby('workingday')['cou
 ax4 = fig.add_subplot(2,2,4)
 ax4 = sns.barplot(x='weather',y='count',data=train.groupby('weather')['count'].mean().reset_index())
 
-#通过剩余的分布图，比较好的列与 count 的关系
+#通过剩余的分布图，比较与 count 的关系
 
 # 温度与 count
 fig = plt.figure(figsize=[12,10])
